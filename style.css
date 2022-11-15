@@ -10,7 +10,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,0.4)),url(utmpic.jpg);
+    background-image: linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,0.4)),url(/images/utmpic.jpg);
     background-position: center;
     background-size: cover;
     position: absolute;
