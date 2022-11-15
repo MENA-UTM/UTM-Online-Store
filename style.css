@@ -42,10 +42,6 @@ body {
     font-size: 20px;
     margin-top: 15px;
 }
-div{
-    align-items: center;
-}
-    
 .g-signin2{
   width: 100%;
 }
