@@ -1,0 +1,69 @@
+﻿@model IEnumerable<OnlineShopping.Models.orderdetail>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.psale_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.pp_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.order_feadback)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.order.order_status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Prod_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.Customer_FirstName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.psale_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.pp_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.order_feadback)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.order.order_status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Prod_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.Customer_FirstName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.orderdetail_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.orderdetail_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.orderdetail_id })
+        </td>
+    </tr>
+}
+
+</table>

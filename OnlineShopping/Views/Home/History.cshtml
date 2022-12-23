@@ -1,0 +1,76 @@
+﻿@model IEnumerable<OnlineShopping.Models.orderdetail>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@{
+    ViewBag.Title = "History";
+}
+
+
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.pp_price)
+        </th>
+
+
+        <th>
+            @Html.DisplayNameFor(model => model.order.order_status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Prod_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.Customer_FirstName)
+        </th>
+        
+        
+        <th>
+           Feadback
+        </th>
+        
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+
+    <td>
+        @Html.DisplayFor(modelItem => item.pp_price)
+    </td>
+
+
+    <td>
+        @Html.DisplayFor(modelItem => item.order.order_status)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Product.Prod_Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Customer.Customer_FirstName)
+    </td>
+   
+    <td>
+
+
+        @if (Session["CFeadID"] == null && Session["FID"] == null)
+        {
+            <a href="@Url.Action("FeadBack", "Home", new { idp = item.product_fid, idc = item.CusFid })" class="option2">Give Feadback</a>
+        }
+       
+
+
+    </td>
+
+
+</tr>
+    }
+
+</table>

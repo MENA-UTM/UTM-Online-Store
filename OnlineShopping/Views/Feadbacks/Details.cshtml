@@ -1,0 +1,42 @@
+﻿@model OnlineShopping.Models.Feadback
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Feadback</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FeadBack_Comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FeadBack_Comments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.Customer_FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.Customer_FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Prod_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.Prod_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.FeadBack_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
