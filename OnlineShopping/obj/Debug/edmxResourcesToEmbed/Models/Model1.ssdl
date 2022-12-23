@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OnlineShoppingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="Admin_Id" />
+    </Key>
+    <Property Name="Admin_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Admin_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Admin_Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Cat_Id" />
+    </Key>
+    <Property Name="Cat_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cat_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Customer_Id" />
+    </Key>
+    <Property Name="Customer_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Customer_LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Customer_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Customer_Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Customer_Contact" Type="nvarchar" MaxLength="50" />
+    <Property Name="Customer_Address" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Feadback">
+    <Key>
+      <PropertyRef Name="FeadBack_ID" />
+    </Key>
+    <Property Name="FeadBack_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cus_Fid" Type="int" />
+    <Property Name="Pro_Fid" Type="int" />
+    <Property Name="FeadBack_Comments" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="order">
+    <Key>
+      <PropertyRef Name="order_id" />
+    </Key>
+    <Property Name="order_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="order_date" Type="datetime" Nullable="false" />
+    <Property Name="order_status" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="cus_fid" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="orderdetails">
+    <Key>
+      <PropertyRef Name="orderdetail_id" />
+    </Key>
+    <Property Name="orderdetail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="order_fid" Type="int" Nullable="false" />
+    <Property Name="product_fid" Type="int" Nullable="false" />
+    <Property Name="psale_price" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="pp_price" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="quantity" Type="int" />
+    <Property Name="order_feadback" Type="bit" />
+    <Property Name="CusFid" Type="int" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Prod_Id" />
+    </Key>
+    <Property Name="Prod_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Prod_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Prod_Disc" Type="nvarchar" MaxLength="50" />
+    <Property Name="Purchase_Price" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Sale_Price" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Prod_Pic" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Cat_Fid" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_Feadback_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Feadback" Type="Self.Feadback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Customer_Id" />
+      </Principal>
+      <Dependent Role="Feadback">
+        <PropertyRef Name="Cus_Fid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Feadback_Product">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="Feadback" Type="Self.Feadback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Prod_Id" />
+      </Principal>
+      <Dependent Role="Feadback">
+        <PropertyRef Name="Pro_Fid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_order_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+    <End Role="order" Type="Self.order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Customer_Id" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="cus_fid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_orderdetails_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Customer_Id" />
+      </Principal>
+      <Dependent Role="orderdetails">
+        <PropertyRef Name="CusFid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_orderdetails_order">
+    <End Role="order" Type="Self.order" Multiplicity="1" />
+    <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="order">
+        <PropertyRef Name="order_id" />
+      </Principal>
+      <Dependent Role="orderdetails">
+        <PropertyRef Name="order_fid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_orderdetails_Product">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Prod_Id" />
+      </Principal>
+      <Dependent Role="orderdetails">
+        <PropertyRef Name="product_fid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Product_Category">
+    <End Role="Category" Type="Self.Category" Multiplicity="1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Cat_Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="Cat_Fid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OnlineShoppingModelStoreContainer">
+    <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Feadback" EntityType="Self.Feadback" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="order" EntityType="Self.order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="orderdetails" EntityType="Self.orderdetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Feadback_Customer" Association="Self.FK_Feadback_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="Feadback" EntitySet="Feadback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Feadback_Product" Association="Self.FK_Feadback_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Feadback" EntitySet="Feadback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_order_Customer" Association="Self.FK_order_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="order" EntitySet="order" />
+    </AssociationSet>
+    <AssociationSet Name="FK_orderdetails_Customer" Association="Self.FK_orderdetails_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="orderdetails" EntitySet="orderdetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_orderdetails_order" Association="Self.FK_orderdetails_order">
+      <End Role="order" EntitySet="order" />
+      <End Role="orderdetails" EntitySet="orderdetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_orderdetails_Product" Association="Self.FK_orderdetails_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="orderdetails" EntitySet="orderdetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
