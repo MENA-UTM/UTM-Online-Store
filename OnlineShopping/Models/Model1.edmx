@@ -1,0 +1,547 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OnlineShoppingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Admin_Id" />
+          </Key>
+          <Property Name="Admin_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Admin_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Admin_Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Cat_Id" />
+          </Key>
+          <Property Name="Cat_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cat_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Customer_Id" />
+          </Key>
+          <Property Name="Customer_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Customer_FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Customer_LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Customer_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Customer_Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Customer_Contact" Type="nvarchar" MaxLength="50" />
+          <Property Name="Customer_Address" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Feadback">
+          <Key>
+            <PropertyRef Name="FeadBack_ID" />
+          </Key>
+          <Property Name="FeadBack_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cus_Fid" Type="int" />
+          <Property Name="Pro_Fid" Type="int" />
+          <Property Name="FeadBack_Comments" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_date" Type="datetime" Nullable="false" />
+          <Property Name="order_status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="cus_fid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="orderdetails">
+          <Key>
+            <PropertyRef Name="orderdetail_id" />
+          </Key>
+          <Property Name="orderdetail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_fid" Type="int" Nullable="false" />
+          <Property Name="product_fid" Type="int" Nullable="false" />
+          <Property Name="psale_price" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="pp_price" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="order_feadback" Type="bit" />
+          <Property Name="CusFid" Type="int" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Prod_Id" />
+          </Key>
+          <Property Name="Prod_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Prod_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Prod_Disc" Type="nvarchar" MaxLength="50" />
+          <Property Name="Purchase_Price" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Sale_Price" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Prod_Pic" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Cat_Fid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_Feadback_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Feadback" Type="Self.Feadback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_Id" />
+            </Principal>
+            <Dependent Role="Feadback">
+              <PropertyRef Name="Cus_Fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feadback_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Feadback" Type="Self.Feadback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Prod_Id" />
+            </Principal>
+            <Dependent Role="Feadback">
+              <PropertyRef Name="Pro_Fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_Id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="cus_fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderdetails_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_Id" />
+            </Principal>
+            <Dependent Role="orderdetails">
+              <PropertyRef Name="CusFid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderdetails_order">
+          <End Role="order" Type="Self.order" Multiplicity="1" />
+          <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order">
+              <PropertyRef Name="order_id" />
+            </Principal>
+            <Dependent Role="orderdetails">
+              <PropertyRef Name="order_fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderdetails_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Prod_Id" />
+            </Principal>
+            <Dependent Role="orderdetails">
+              <PropertyRef Name="product_fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Cat_Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Cat_Fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OnlineShoppingModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feadback" EntityType="Self.Feadback" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order" EntityType="Self.order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orderdetails" EntityType="Self.orderdetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Feadback_Customer" Association="Self.FK_Feadback_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Feadback" EntitySet="Feadback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feadback_Product" Association="Self.FK_Feadback_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Feadback" EntitySet="Feadback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_Customer" Association="Self.FK_order_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderdetails_Customer" Association="Self.FK_orderdetails_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="orderdetails" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderdetails_order" Association="Self.FK_orderdetails_order">
+            <End Role="order" EntitySet="order" />
+            <End Role="orderdetails" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderdetails_Product" Association="Self.FK_orderdetails_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="orderdetails" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OnlineShoppingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="OnlineShoppingEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admins" EntityType="OnlineShoppingModel.Admin" />
+          <EntitySet Name="Categories" EntityType="OnlineShoppingModel.Category" />
+          <EntitySet Name="Customers" EntityType="OnlineShoppingModel.Customer" />
+          <EntitySet Name="Feadbacks" EntityType="OnlineShoppingModel.Feadback" />
+          <EntitySet Name="orders" EntityType="OnlineShoppingModel.order" />
+          <EntitySet Name="Products" EntityType="OnlineShoppingModel.Product" />
+          <EntitySet Name="sysdiagrams" EntityType="OnlineShoppingModel.sysdiagram" />
+          <AssociationSet Name="FK_Product_Category" Association="OnlineShoppingModel.FK_Product_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feadback_Customer" Association="OnlineShoppingModel.FK_Feadback_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Feadback" EntitySet="Feadbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_Customer" Association="OnlineShoppingModel.FK_order_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="order" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feadback_Product" Association="OnlineShoppingModel.FK_Feadback_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Feadback" EntitySet="Feadbacks" />
+          </AssociationSet>
+          <EntitySet Name="orderdetails" EntityType="OnlineShoppingModel.orderdetail" />
+          <AssociationSet Name="FK_orderdetails_order" Association="OnlineShoppingModel.FK_orderdetails_order">
+            <End Role="order" EntitySet="orders" />
+            <End Role="orderdetail" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderdetails_Product" Association="OnlineShoppingModel.FK_orderdetails_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="orderdetail" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderdetails_Customer" Association="OnlineShoppingModel.FK_orderdetails_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="orderdetail" EntitySet="orderdetails" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Admin_Id" />
+          </Key>
+          <Property Name="Admin_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Admin_Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Admin_Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Cat_Id" />
+          </Key>
+          <Property Name="Cat_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cat_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Products" Relationship="OnlineShoppingModel.FK_Product_Category" FromRole="Category" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Customer_Id" />
+          </Key>
+          <Property Name="Customer_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Customer_FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Customer_LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Customer_Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Customer_Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Customer_Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Customer_Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feadbacks" Relationship="OnlineShoppingModel.FK_Feadback_Customer" FromRole="Customer" ToRole="Feadback" />
+          <NavigationProperty Name="orders" Relationship="OnlineShoppingModel.FK_order_Customer" FromRole="Customer" ToRole="order" />
+          <NavigationProperty Name="orderdetails" Relationship="OnlineShoppingModel.FK_orderdetails_Customer" FromRole="Customer" ToRole="orderdetail" />
+        </EntityType>
+        <EntityType Name="Feadback">
+          <Key>
+            <PropertyRef Name="FeadBack_ID" />
+          </Key>
+          <Property Name="FeadBack_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cus_Fid" Type="Int32" />
+          <Property Name="Pro_Fid" Type="Int32" />
+          <Property Name="FeadBack_Comments" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="OnlineShoppingModel.FK_Feadback_Customer" FromRole="Feadback" ToRole="Customer" />
+          <NavigationProperty Name="Product" Relationship="OnlineShoppingModel.FK_Feadback_Product" FromRole="Feadback" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="order_status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cus_fid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="OnlineShoppingModel.FK_order_Customer" FromRole="order" ToRole="Customer" />
+          <NavigationProperty Name="orderdetails" Relationship="OnlineShoppingModel.FK_orderdetails_order" FromRole="order" ToRole="orderdetail" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Prod_Id" />
+          </Key>
+          <Property Name="Prod_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Prod_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Prod_Disc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Purchase_Price" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Sale_Price" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Prod_Pic" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Cat_Fid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="OnlineShoppingModel.FK_Product_Category" FromRole="Product" ToRole="Category" />
+          <NavigationProperty Name="Feadbacks" Relationship="OnlineShoppingModel.FK_Feadback_Product" FromRole="Product" ToRole="Feadback" />
+          <NavigationProperty Name="orderdetails" Relationship="OnlineShoppingModel.FK_orderdetails_Product" FromRole="Product" ToRole="orderdetail" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Product_Category">
+          <End Type="OnlineShoppingModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="OnlineShoppingModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Cat_Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Cat_Fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feadback_Customer">
+          <End Type="OnlineShoppingModel.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="OnlineShoppingModel.Feadback" Role="Feadback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_Id" />
+            </Principal>
+            <Dependent Role="Feadback">
+              <PropertyRef Name="Cus_Fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_Customer">
+          <End Type="OnlineShoppingModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="OnlineShoppingModel.order" Role="order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_Id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="cus_fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feadback_Product">
+          <End Type="OnlineShoppingModel.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="OnlineShoppingModel.Feadback" Role="Feadback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Prod_Id" />
+            </Principal>
+            <Dependent Role="Feadback">
+              <PropertyRef Name="Pro_Fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="orderdetail">
+          <Key>
+            <PropertyRef Name="orderdetail_id" />
+          </Key>
+          <Property Name="orderdetail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_fid" Type="Int32" Nullable="false" />
+          <Property Name="product_fid" Type="Int32" Nullable="false" />
+          <Property Name="psale_price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="pp_price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="order_feadback" Type="Boolean" />
+          <NavigationProperty Name="order" Relationship="OnlineShoppingModel.FK_orderdetails_order" FromRole="orderdetail" ToRole="order" />
+          <NavigationProperty Name="Product" Relationship="OnlineShoppingModel.FK_orderdetails_Product" FromRole="orderdetail" ToRole="Product" />
+          <Property Name="CusFid" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="OnlineShoppingModel.FK_orderdetails_Customer" FromRole="orderdetail" ToRole="Customer" />
+        </EntityType>
+        <Association Name="FK_orderdetails_order">
+          <End Type="OnlineShoppingModel.order" Role="order" Multiplicity="1" />
+          <End Type="OnlineShoppingModel.orderdetail" Role="orderdetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order">
+              <PropertyRef Name="order_id" />
+            </Principal>
+            <Dependent Role="orderdetail">
+              <PropertyRef Name="order_fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderdetails_Product">
+          <End Type="OnlineShoppingModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="OnlineShoppingModel.orderdetail" Role="orderdetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Prod_Id" />
+            </Principal>
+            <Dependent Role="orderdetail">
+              <PropertyRef Name="product_fid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderdetails_Customer">
+          <End Type="OnlineShoppingModel.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="OnlineShoppingModel.orderdetail" Role="orderdetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_Id" />
+            </Principal>
+            <Dependent Role="orderdetail">
+              <PropertyRef Name="CusFid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OnlineShoppingModelStoreContainer" CdmEntityContainer="OnlineShoppingEntities2">
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="OnlineShoppingModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="Admin_Password" ColumnName="Admin_Password" />
+                <ScalarProperty Name="Admin_Email" ColumnName="Admin_Email" />
+                <ScalarProperty Name="Admin_Id" ColumnName="Admin_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="OnlineShoppingModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="Cat_Name" ColumnName="Cat_Name" />
+                <ScalarProperty Name="Cat_Id" ColumnName="Cat_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="OnlineShoppingModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Customer_Address" ColumnName="Customer_Address" />
+                <ScalarProperty Name="Customer_Contact" ColumnName="Customer_Contact" />
+                <ScalarProperty Name="Customer_Password" ColumnName="Customer_Password" />
+                <ScalarProperty Name="Customer_Email" ColumnName="Customer_Email" />
+                <ScalarProperty Name="Customer_LastName" ColumnName="Customer_LastName" />
+                <ScalarProperty Name="Customer_FirstName" ColumnName="Customer_FirstName" />
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feadbacks">
+            <EntityTypeMapping TypeName="OnlineShoppingModel.Feadback">
+              <MappingFragment StoreEntitySet="Feadback">
+                <ScalarProperty Name="FeadBack_Comments" ColumnName="FeadBack_Comments" />
+                <ScalarProperty Name="Pro_Fid" ColumnName="Pro_Fid" />
+                <ScalarProperty Name="Cus_Fid" ColumnName="Cus_Fid" />
+                <ScalarProperty Name="FeadBack_ID" ColumnName="FeadBack_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orders">
+            <EntityTypeMapping TypeName="OnlineShoppingModel.order">
+              <MappingFragment StoreEntitySet="order">
+                <ScalarProperty Name="cus_fid" ColumnName="cus_fid" />
+                <ScalarProperty Name="order_status" ColumnName="order_status" />
+                <ScalarProperty Name="order_date" ColumnName="order_date" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="OnlineShoppingModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Cat_Fid" ColumnName="Cat_Fid" />
+                <ScalarProperty Name="Prod_Pic" ColumnName="Prod_Pic" />
+                <ScalarProperty Name="Sale_Price" ColumnName="Sale_Price" />
+                <ScalarProperty Name="Purchase_Price" ColumnName="Purchase_Price" />
+                <ScalarProperty Name="Prod_Disc" ColumnName="Prod_Disc" />
+                <ScalarProperty Name="Prod_Name" ColumnName="Prod_Name" />
+                <ScalarProperty Name="Prod_Id" ColumnName="Prod_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="OnlineShoppingModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orderdetails">
+            <EntityTypeMapping TypeName="OnlineShoppingModel.orderdetail">
+              <MappingFragment StoreEntitySet="orderdetails">
+                <ScalarProperty Name="CusFid" ColumnName="CusFid" />
+                <ScalarProperty Name="order_feadback" ColumnName="order_feadback" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="pp_price" ColumnName="pp_price" />
+                <ScalarProperty Name="psale_price" ColumnName="psale_price" />
+                <ScalarProperty Name="product_fid" ColumnName="product_fid" />
+                <ScalarProperty Name="order_fid" ColumnName="order_fid" />
+                <ScalarProperty Name="orderdetail_id" ColumnName="orderdetail_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
